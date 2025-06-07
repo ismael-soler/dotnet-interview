@@ -1,18 +1,25 @@
 name: crunchloop-todo-project
-version: '3.8'
 
 services:
   api:
     container_name: crunchloop-todo-api
     image: mcr.microsoft.com/devcontainers/dotnet:8.0
+    entrypoint: /bin/sh -c "chmod +x /app/TodoApi/entrypoint.sh && ./app/TodoApi/entrypoint.sh"
     command: sleep infinity
     depends_on:
       - sqlserver
     volumes:
       - ..:/app
-  db:
+  sqlserver:
     container_name: crunchloop-todo-db 
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_SA_PASSWORD=Password123
+  mcp-server:
+    container_name: crunchloop-todo-mcp
+    build:
+      context: ../
+      dockerfile: McpServer/Dockerfile
+    depends_on:
+      - api

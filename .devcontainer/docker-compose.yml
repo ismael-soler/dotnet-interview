@@ -1,14 +1,17 @@
+name: crunchloop-todo-project
 version: '3.8'
 
 services:
-  app:
+  api:
+    container_name: crunchloop-todo-api
     image: mcr.microsoft.com/devcontainers/dotnet:8.0
     command: sleep infinity
     depends_on:
       - sqlserver
     volumes:
       - ..:/app
-  sqlserver:
+  db:
+    container_name: crunchloop-todo-db 
     image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       - ACCEPT_EULA=Y
